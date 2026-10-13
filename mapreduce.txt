@@ -1,0 +1,61 @@
+java -version
+javac -version
+
+nano MapReduce.java
+
+
+import java.io.*;
+import java.util.*;
+
+public class MapReduce {
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(
+            new FileReader("input.txt")
+        );
+
+        HashMap<String, Integer> map = new HashMap<>();
+        String line;
+
+        // Map phase
+        while ((line = br.readLine()) != null) {
+            String[] words = line.toLowerCase().split("\\s+");
+
+            for (String word : words) {
+                map.put(word, map.getOrDefault(word, 0) + 1);
+            }
+        }
+        br.close();
+
+        // Reduce phase
+        PrintWriter pw = new PrintWriter("output.txt");
+
+        for (String word : map.keySet()) {
+            pw.println(word + " : " + map.get(word));
+        }
+
+        pw.close();
+
+        System.out.println("Word Count Result:");
+        BufferedReader out = new BufferedReader(
+            new FileReader("output.txt")
+        );
+
+        while ((line = out.readLine()) != null) {
+            System.out.println(line);
+        }
+        out.close();
+    }
+
+}
+
+input file-create:
+nano input.txt
+
+hello world
+hello java
+world java hello
+
+javac MapReduce.java
+java MapReduce
+
+cat output.txt

@@ -1,0 +1,23 @@
+<script>
+        async function getweather()
+        {
+            const city=document.getElementById("city").value.toLowerCase();
+            let temperature;
+            let condition;
+            let humidity;
+            if(city=="")
+        {
+            document.getElementById("result").innerHTML="please enter city";
+            return;
+        }
+        else if(city=="madurai")
+        {
+            temperature=32;
+            condition="hot";
+            humidity=20;
+        }
+        document.getElementById("result").innerHTML="<br>City: "+city+"<br> Temperature: "+temperature+"C"
+        +"<br> conditon: "+condition+
+        "humidity: "+humidity;
+        }
+    </script>

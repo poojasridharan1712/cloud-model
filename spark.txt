@@ -1,0 +1,40 @@
+java -version
+hadoop version
+sudo apt update
+sudo apt install openjdk-17-jdk -y
+javac -version
+sudo apt install scala -y
+scala -version
+hadoop version
+jps
+start-dfs.sh
+jps
+java -version
+cd ~
+wget https://archive.apache.org/dist/spark/spark-3.5.7/spark-3.5.7-bin-hadoop3.tgz
+tar -xzf spark-3.5.7-bin-hadoop3.tgz
+sudo mv spark-3.5.7-bin-hadoop3 /usr/local/spark
+
+echo 'export SPARK_HOME=/usr/local/spark' >> ~/.bashrc
+echo 'export PATH=$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin' >> ~/.bashrc
+source ~/.bashrc
+
+spark-shell --version
+
+spark-shell
+echo "hello spark hello hadoop spark word count" > ~/input.txt
+hdfs dfs -mkdir -p /input
+hdfs dfs -put -f ~/input.txt /input/
+
+val input = sc.textFile("hdfs:///input/input.txt")
+val words = input.flatMap(line => line.split("\\s+"))
+val counts = words.map(word => (word, 1)).reduceByKey(_ + _)
+counts.collect().foreach(println)
+
+
+java -version
+wget https://archive.apache.org/dist/spark/spark-3.5.7/spark-3.5.7-bin-hadoop3.tgz
+ls -lh spark-3.5.7-bin-hadoop3.tgz
+tar -xzf spark-3.5.7-bin-hadoop3.tgz
+sudo mv spark-3.5.7-bin-hadoop3 /opt/spark
+after this go to 16th line.

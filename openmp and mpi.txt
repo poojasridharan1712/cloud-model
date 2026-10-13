@@ -1,0 +1,158 @@
+sudo apt update
+sudo apt install -y python3 python3-mpi4py mpich
+
+nano mpi.py
+from mpi4py import MPI
+
+comm = MPI.COMM_WORLD
+rank = comm.Get_rank()
+size = comm.Get_size()
+
+print("Hello from process", rank,
+      "out of", size, "processes")
+
+ctrl+o , enter , ctrl+x
+
+mpiexec -n 4 python3 mpi.py
+
+
+
+sudo apt install -y gcc
+
+nano omp.c
+#include <stdio.h>
+#include <omp.h>
+
+int main() {
+    #pragma omp parallel
+    {
+        printf("Hello from thread %d\n",
+               omp_get_thread_num());
+    }
+    return 0;
+}
+
+ctrl+o , enter , ctrl+x
+
+gcc -fopenmp omp.c -o omp
+./omp
+
+
+sudo apt update
+sudo apt install -y gcc
+
+gcc -fopenmp sample1.c -o sample1
+./sample1
+sample 1
+#include <stdio.h>
+#include <omp.h>
+
+int main() {
+    #pragma omp parallel
+    {
+        printf("Hello World from thread %d\n",
+               omp_get_thread_num());
+    }
+    return 0;
+}
+
+gcc -fopenmp sample2.c -o sample2
+./sample2
+
+
+loop level
+nano loop.c
+
+#include <stdio.h>
+#include <omp.h>
+
+int main() {
+    int sum = 0;
+
+    #pragma omp parallel for reduction(+:sum)
+    for (int i = 1; i <= 10; i++) {
+        sum += i;
+    }
+
+    printf("Sum = %d\n", sum);
+    return 0;
+}
+
+ gcc -fopenmp loop.c -o loop
+  ./loop
+
+
+using private
+
+#include <stdio.h>
+#include <omp.h>
+
+int main() {
+    int x = 100;
+
+    #pragma omp parallel private(x)
+    {
+        x = omp_get_thread_num();
+        printf("Thread %d: x = %d\n",
+               omp_get_thread_num(), x);
+    }
+
+    printf("Original x = %d\n", x);
+    return 0;
+}
+
+firstprivate
+
+#include <stdio.h>
+#include <omp.h>
+
+int main() {
+    int x = 10;
+
+    #pragma omp parallel firstprivate(x)
+    {
+        x += omp_get_thread_num();
+        printf("Thread %d: x = %d\n",
+               omp_get_thread_num(), x);
+    }
+
+    printf("Original x = %d\n", x);
+    return 0;
+}
+
+lastprivate
+
+#include <stdio.h>
+#include <omp.h>
+
+int main() {
+    int x = 0;
+
+    #pragma omp parallel for lastprivate(x)
+    for (int i = 1; i <= 5; i++) {
+        x = i;
+    }
+
+    printf("Last value of x = %d\n", x);
+    return 0;
+}
+
+criticalsession
+
+#include <stdio.h>
+#include <omp.h>
+
+int main() {
+    int count = 0;
+
+    #pragma omp parallel for
+    for (int i = 0; i < 1000; i++) {
+        #pragma omp critical
+        {
+            count++;
+        }
+    }
+
+    printf("Count = %d\n", count);
+    return 0;
+}

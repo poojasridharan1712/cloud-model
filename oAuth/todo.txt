@@ -1,0 +1,96 @@
+cd oAuth
+npm create vite@latest auth0-idaas -- --template react
+cd auth0-idaas
+npm install
+npm install @auth0/auth0-react
+
+code .
+
+Setting	Value
+Allowed Callback URLs	http://localhost:5173
+Allowed Logout URLs	http://localhost:5173
+Allowed Web Origins	http://localhost:5173
+
+
+main.jsx 
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { Auth0Provider } from '@auth0/auth0-react';
+import App from './App.jsx';
+import './index.css';
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <Auth0Provider
+      domain="YOUR_AUTH0_DOMAIN"
+      clientId="YOUR_CLIENT_ID"
+      authorizationParams={{
+        redirect_uri: window.location.origin
+      }}
+    >
+      <App />
+    </Auth0Provider>
+  </React.StrictMode>
+);
+
+App.jsx
+
+import { useAuth0 } from '@auth0/auth0-react';
+
+function App() {
+  const {
+    loginWithRedirect,
+    logout,
+    isAuthenticated,
+    user,
+    isLoading
+  } = useAuth0();
+
+  if (isLoading) {
+    return <h2>Loading...</h2>;
+  }
+
+  return (
+    <div style={{ textAlign: 'center', marginTop: '80px' }}>
+      <h1>Auth0 IDaaS Application</h1>
+
+      {!isAuthenticated ? (
+        <button onClick={() => loginWithRedirect()}>
+          Login
+        </button>
+      ) : (
+        <>
+          <h2>Welcome, {user.name}!</h2>
+          <p>Email: {user.email}</p>
+
+          {user.picture && (
+            <img
+              src={user.picture}
+              alt="Profile"
+              width="100"
+            />
+          )}
+
+          <br /><br />
+
+          <button
+            onClick={() =>
+              logout({
+                logoutParams: {
+                  returnTo: window.location.origin
+                }
+              })
+            }
+          >
+            Logout
+          </button>
+        </>
+      )}
+    </div>
+  );
+}
+
+export default App;
+
+
+npm run dev
