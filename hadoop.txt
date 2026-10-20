@@ -70,16 +70,31 @@ nano $HADOOP_HOME/etc/hadoop/hdfs-site.xml
     </property>
 </configuration>
 
-cp -n $HADOOP_HOME/etc/hadoop/mapred-site.xml.template \$HADOOP_HOME/etc/hadoop/mapred-site.xml
 nano $HADOOP_HOME/etc/hadoop/mapred-site.xml
 
-<?xml version="1.0"?>
-<configuration>
-    <property>
-        <name>mapreduce.framework.name</name>
-        <value>yarn</value>
-    </property>
-</configuration>
+   <?xml version="1.0"?>
+   <configuration>
+       <property>
+           <name>mapreduce.framework.name</name>
+           <value>yarn</value>
+       </property>
+       <property>
+           <name>yarn.app.mapreduce.am.env</name>
+           <value>HADOOP_MAPRED_HOME=/home/vboxuser/hadoop</value>
+       </property>
+       <property>
+           <name>mapreduce.map.env</name>
+           <value>HADOOP_MAPRED_HOME=/home/vboxuser/hadoop</value>
+       </property>
+       <property>
+           <name>mapreduce.reduce.env</name>
+           <value>HADOOP_MAPRED_HOME=/home/vboxuser/hadoop</value>
+       </property>
+       <property>
+           <name>mapreduce.application.classpath</name>
+           <value>/home/vboxuser/hadoop/share/hadoop/mapreduce/*:/home/vboxuser/hadoop/share/hadoop/mapreduce/lib/*</value>
+       </property>
+   </configuration>
 
 nano $HADOOP_HOME/etc/hadoop/yarn-site.xml
 <?xml version="1.0"?>
