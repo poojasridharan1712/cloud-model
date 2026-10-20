@@ -22,10 +22,12 @@ source ~/.bashrc
 spark-shell --version
 
 spark-shell
+:quit
 echo "hello spark hello hadoop spark word count" > ~/input.txt
 hdfs dfs -mkdir -p /input
 hdfs dfs -put -f ~/input.txt /input/
 
+spark-shell
 val input = sc.textFile("hdfs:///input/input.txt")
 val words = input.flatMap(line => line.split("\\s+"))
 val counts = words.map(word => (word, 1)).reduceByKey(_ + _)
